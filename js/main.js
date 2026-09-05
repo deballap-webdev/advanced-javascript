@@ -92,8 +92,8 @@ console.log(vArray);
 console.log(yArray);
 // nested structural data types still share a reference!
 // Note: Array.from() and slice() create shallow copies, too
-// When it comes to objects, what about...Object.freeze() ??
 
+// When it comes to objects, what about...Object.freeze() ??
 const scoreObj = {
   first: 44,
   second: 12,
@@ -102,3 +102,47 @@ const scoreObj = {
 Object.freeze(scoreObj);
 scoreObj.third.a = -8;
 console.log(scoreObj);
+// still mutates - it is a shallow freeze
+
+// Deep copy is need to avoid this with structural data types
+// Several libraries like lodash, Ramda and others have this feature built-in
+
+// This is a one line vanilla js solution but note it does not work for undefined, Dates, functions, Infinity, RegExps, Maps, Sets, Blobs, FileLists, ImageDatas and other complex data types
+
+const newScoreObj = JSON.parse(JSON.stringify(scoreObj));
+console.log(newScoreObj);
+console.log(newScoreObj === scoreObj);
+
+// instead of using a library here is a vanilla js function
+
+const deepClone = (obj) => {
+  if (typeof obj !== "object" || obj === null) return obj;
+  // create an object or array to hold the values
+  const newObj = Array.isArray(obj) ? [] : {};
+  for (let key in obj) {
+    const value = obj[key];
+    // recursive call for nested objects and arrays
+    newObj[key] = deepClone(value);
+  }
+
+  return newObj;
+};
+
+const myScoreObj = deepClone(scoreObj);
+scoreObj.third.a = 9;
+console.log(myScoreObj === scoreObj);
+console.log(myScoreObj);
+console.log(scoreObj);
+
+// Now we can make a pure function
+const pureAddToScoreHistory = (array, score, cloneFunc) => {
+  const newArray = cloneFunc(array);
+  newArray.push(score);
+  return newArray;
+};
+
+const pureScoreHistory = pureAddToScoreHistory(scoreArray, 18, deepClone);
+
+console.log(pureScoreHistory);
+console.log(scoreArray);
+console.log(pureScoreHistory === scoreArray);
