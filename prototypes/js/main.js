@@ -74,7 +74,6 @@ for (let key in luxuryCar) {
 } */
 
 // Object constructors
-
 function Animal(species) {
   this.species = species;
   this.eats = true;
@@ -92,3 +91,35 @@ console.log(Bear.__proto__);
 console.log(Bear.__proto__ === Animal.prototype);
 console.log(Animal.prototype);
 console.log(Bear);
+
+// Now an ES6 Classes example of inheritance
+
+class Vehicle {
+  constructor() {
+    this.wheels = 4;
+    this.motorized = true;
+  }
+
+  ready() {
+    return "Ready to go";
+  }
+}
+
+class Motorcycle extends Vehicle {
+  constructor() {
+    super();
+    this.wheels = 2;
+  }
+
+  wheelie() {
+    return "On one wheel now!";
+  }
+}
+
+const myBike = new Motorcycle();
+console.log(myBike);
+
+console.log(myBike.ready());
+console.log(myBike.wheelie());
+
+const myTruck = new Vehicle();
