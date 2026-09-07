@@ -90,3 +90,50 @@ const fibPos = (pos) => {
 const fibPos = (pos) => (pos < 2 ? pos : fibPos(pos - 1) + fibPos(pos - 2));
 
 console.log(fibPos(8));
+
+// Real-Life Examples:
+// 1) Continuation Token from an API
+const getAWSProductIdImages = async () => {
+  //get the data with await fetch request
+  if (data.isTruncated) {
+    //recursive
+    return await getAWSProductIdImages(
+      productId,
+      s3, //connection to s3
+      resultArray, //accumulator
+      data.NextContinuatonToken,
+    );
+  }
+  return resultArray;
+};
+
+// 2) A Parser: a company directory, a file directory, the DOM - web crawler, An XML or JSON data export
+
+const artistByGenre = {
+  jazz: ["Miles Davis", "John Coltrane"],
+  rock: {
+    classic: ["Bob Seger", "The Eagles"],
+    hair: ["Def Leppard", "Whitesnake", "Poison"],
+    alt: {
+      classic: ["Pearl Jan", "The Killers"],
+      current: ["Jowave", "Sir Sly"],
+    },
+  },
+  unclassified: {
+    new: ["Caamp", "Neil Young"],
+    classic: ["Seal", "Morcheeba", "Chris Stapleton"],
+  },
+};
+
+const getArtistNames = (dataObj, arr = []) => {
+  Object.keys(dataObj).forEach((key) => {
+    if (Array.isArray(dataObj[key])) {
+      return dataObj[key].forEach((artist) => arr.push(artist));
+    }
+    getArtistNames(dataObj[key], arr);
+  });
+
+  return arr;
+};
+
+console.log(getArtistNames(artistByGenre));
