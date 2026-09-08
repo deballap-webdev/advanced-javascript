@@ -45,6 +45,7 @@ console.log(updateHeaderText);
 console.log(updateHeaderText("Hello Debbie!"));
 // Another common use of curryig is function composition
 // Allows calling small functions in a specific order
+
 const addCustomer =
   (fn) =>
   (...args) => {
@@ -66,10 +67,28 @@ completeOrder = addCustomer(completeOrder);
 console.log(completeOrder);
 completeOrder(1000);
 
-function addCustomer(...args) {
+/* function addCustomer(...args) {
   return function processOrder(...args) {
     return function completeOrder(...args) {
       //end
     };
   };
-}
+} */
+
+// Requires a function with a fixed number of parameters
+const curry = (fn) => {
+  return (curried = (...args) => {
+    if (fn.length !== args.length) {
+      return curried.bind(null, ...args); //bind creates a new function
+    }
+    return fn(...args);
+  });
+};
+
+const total = (x, y, z) => x + y + z;
+
+const curriedTotal = curry(total);
+
+console.log(curriedTotal);
+
+console.log(curriedTotal(2)(3)(4));
