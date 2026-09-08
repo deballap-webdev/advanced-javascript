@@ -137,3 +137,43 @@ const getArtistNames = (dataObj, arr = []) => {
 };
 
 console.log(getArtistNames(artistByGenre));
+const sumNested = (...args) => {
+  return args.reduce((sum, num) => {
+    if (Array.isArray(num)) {
+      return sum + sumNested(...num);
+    } else {
+      return sum + num;
+    }
+  }, 0);
+};
+
+console.log(
+  sumNested([8, 5], [8, 83], [3], [399, [388, 93, [838]]], 3, [], [888]),
+);
+
+const findDeepest = (...args) => {
+  const array = [];
+  const deepest = (depth = 0, ...args) => {
+    args.forEach((arg) => {
+      if (Array.isArray(arg)) {
+        deepest(depth + 1, ...arg);
+      } else {
+        array.push({ depth: depth, arg: arg });
+      }
+    });
+    return array;
+  };
+
+  return getDeepest(deepest(0, ...args));
+};
+
+const getDeepest = (array) => {
+  console.log(array);
+  const deepestNum = array.reduce((compare, obj) => {
+    return compare > obj.depth ? compare : obj.depth;
+  }, 0);
+  console.log(deepestNum);
+  const deepestObj = array.find((obj) => obj.depth === deepestNum);
+  return deepestObj.arg;
+};
+console.log(findDeepest(33, 73, [[[[[89], [89, [39]]]]]], [[9, [8]]], 78));
